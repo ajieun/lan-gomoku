@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>弈 · 局域网五子棋</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 背景装饰 -->
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ============ 首页 ============ -->
+<section id="screen-home" class="screen active">
+  <div class="home-card">
+    <div class="logo">
+      <div class="logo-stones">
+        <span class="mini-stone black"></span>
+        <span class="mini-stone white"></span>
+      </div>
+      <h1>弈</h1>
+      <p class="tagline">局域网五子棋 · 双人对战</p>
+    </div>
+
+    <div class="field">
+      <label for="input-name">你的昵称</label>
+      <div class="input-wrap">
+        <input id="input-name" type="text" maxlength="12" placeholder="输入昵称,最多 12 字" autocomplete="off">
+      </div>
+    </div>
+
+    <button id="btn-create" class="btn btn-primary btn-lg">⚔️ 创建房间</button>
+
+    <div class="divider"><span>或加入好友房间</span></div>
+
+    <div class="field join-row">
+      <input id="input-room" type="text" maxlength="4" placeholder="房间码" autocomplete="off" autocapitalize="characters">
+      <button id="btn-join" class="btn btn-primary-outline">加入对局</button>
+    </div>
+    <p class="hint">创建房间后,把房间码或邀请链接发给同一局域网(同一 WiFi)的好友即可开局</p>
+  </div>
+</section>
+
+<!-- ============ 大厅(等待对手) ============ -->
+<section id="screen-lobby" class="screen">
+  <div class="home-card">
+    <div class="logo small">
+      <h1>弈</h1>
+      <p class="tagline">五子棋 · 双人对战</p>
+    </div>
+    <div class="lobby-box">
+      <p class="lobby-label">房间码</p>
+      <div class="room-code" id="lobby-code">----</div>
+      <div class="lobby-actions">
+        <button id="btn-copy-code" class="btn btn-ghost">复制房间码</button>
+        <button id="btn-copy-link" class="btn btn-ghost">复制邀请链接</button>
+      </div>
+      <div class="waiting">
+        <span class="dot-pulse"></span>
+        <span class="dot-pulse"></span>
+        <span class="dot-pulse"></span>
+        <p>等待对手加入…</p>
+      </div>
+      <p class="hint">你执<b>黑棋</b>先行,好友加入后立即开始</p>
+    </div>
+    <button id="btn-lobby-back" class="btn btn-text">← 返回</button>
+  </div>
+</section>
+
+<!-- ============ 对局 ============ -->
+<section id="screen-game" class="screen">
+  <header class="game-header">
+    <div class="room-chip" id="room-chip" title="点击复制房间码">
+      <span class="room-chip-label">房间</span>
+      <span class="room-chip-code" id="room-chip-code">----</span>
+    </div>
+    <div class="status-text" id="status-text">对局进行中</div>
+    <button id="btn-sound" class="icon-btn" title="音效开关">🔊</button>
+  </header>
+
+  <div class="game-body">
+    <main class="board-area">
+      <div class="player-bar">
+        <div class="player-card" id="pcard-black">
+          <span class="stone-icon black"></span>
+          <div class="player-meta">
+            <span class="player-name" id="name-black">黑方</span>
+            <span class="player-sub" id="sub-black">执黑先行</span>
+          </div>
+          <span class="turn-badge">落子中</span>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="player-card" id="pcard-white">
+          <span class="turn-badge">落子中</span>
+          <div class="player-meta right">
+            <span class="player-name" id="name-white">白方</span>
+            <span class="player-sub" id="sub-white">执白后行</span>
+          </div>
+          <span class="stone-icon white"></span>
+        </div>
+      </div>
+
+      <div class="board-frame">
+        <canvas id="board"></canvas>
+        <div class="board-overlay hidden" id="board-overlay"></div>
+      </div>
+
+      <div class="action-bar">
+        <button id="btn-undo" class="btn btn-ghost">🤚 悔棋</button>
+        <button id="btn-resign" class="btn btn-ghost">🏳️ 认输</button>
+        <button id="btn-restart" class="btn btn-gold hidden">🔄 再来一局</button>
+      </div>
+    </main>
+
+    <aside class="side-panel">
+      <div class="chat-panel">
+        <div class="chat-title">💬 对局聊天</div>
+        <div class="chat-list" id="chat-list">
+          <div class="chat-sys">说点什么活跃一下气氛吧~</div>
+        </div>
+        <div class="chat-quick" id="chat-quick"></div>
+        <form class="chat-input-row" id="chat-form">
+          <input id="chat-input" type="text" maxlength="100" placeholder="发送消息…" autocomplete="off">
+          <button type="submit" class="btn btn-send">发送</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ 弹窗 ============ -->
+<div class="modal-mask hidden" id="modal">
+  <div class="modal" id="modal-box">
+    <div class="modal-icon" id="modal-icon">🏆</div>
+    <h2 class="modal-title" id="modal-title">标题</h2>
+    <p class="modal-desc" id="modal-desc">描述</p>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- 提示条 -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
